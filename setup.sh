@@ -6,8 +6,11 @@ pip install --upgrade pip
 # Download and install Miniconda for the user
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
-source $HOME/miniconda3/etc/profile.d/conda.sh
 rm -f Miniconda3-latest-Linux-x86_64.sh
+
+# Set up the environment variables for Miniconda
+export PATH="$HOME/miniconda3/bin:$PATH"
+source $HOME/miniconda3/etc/profile.d/conda.sh
 
 # Initialize conda and update
 conda init
@@ -18,7 +21,9 @@ cd pipeline_code
 
 # Create and activate the SE3 environment
 conda env create -f SE3nv-cuda11.7.yml
-source activate SE3nv2.0  # use 'source activate' for reliability in non-interactive scripts
+echo "conda activate SE3nv2.0" >> ~/.bashrc
+source ~/.bashrc
+conda activate SE3nv2.0
 
 # Clone and set up RFdiffusion
 git clone https://github.com/RosettaCommons/RFdiffusion.git
