@@ -13,7 +13,8 @@ export PATH="$HOME/miniconda3/bin:$PATH"
 source $HOME/miniconda3/etc/profile.d/conda.sh
 
 # Initialize conda and update
-conda init
+conda init bash
+eval "$(conda shell.bash hook)"
 conda update -y conda
 
 # Move into the pipeline_code directory
@@ -21,8 +22,6 @@ cd pipeline_code
 
 # Create and activate the SE3 environment
 conda env create -f SE3nv-cuda11.7.yml
-echo "conda activate SE3nv2.0" >> ~/.bashrc
-source ~/.bashrc
 conda activate SE3nv2.0
 
 # Clone and set up RFdiffusion
