@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# Change directory to your main project directory
-cd $HOME/Protein-design-rcp
-
 # Update pip and install Miniconda
 pip install --upgrade pip
 
-# Download and install Miniconda for the user
+# Change directory to a temporary location to avoid permission issues
+cd /tmp
+
+# Download and install Miniconda for the user in a temporary directory
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/Protein-design-rcp/miniconda3
+bash Miniconda3-latest-Linux-x86_64.sh -b -p /tmp/miniconda3
 rm -f Miniconda3-latest-Linux-x86_64.sh
 
 # Set up the environment variables for Miniconda
-export PATH="$HOME/Protein-design-rcp/miniconda3/bin:$PATH"
-source $HOME/Protein-design-rcp/miniconda3/etc/profile.d/conda.sh
+export PATH="/tmp/miniconda3/bin:$PATH"
+source /tmp/miniconda3/etc/profile.d/conda.sh
 
 # Initialize conda and update
 conda init bash
@@ -22,7 +22,7 @@ conda update -y conda
 
 # Create and activate the SE3 environment for RFdiffusion
 conda create -n SE3nv2.0 python=3.9 -y
-conda activate SE3nv2.0
+source activate SE3nv2.0
 
 # Install dependencies required by RFdiffusion and AlphaFold
 conda install -c conda-forge cudatoolkit=11.3 cudnn=8.2 -y
@@ -33,7 +33,7 @@ pip install -r https://raw.githubusercontent.com/deepmind/alphafold/main/require
 pip install spython yaml absl-py
 
 # Clone and install RFdiffusion in the project directory
-cd $HOME/Protein-design-rcp/pipeline_code
+cd /home/cdarbell/Protein-design-rcp/pipeline_code
 git clone https://github.com/RosettaCommons/RFdiffusion.git
 cd RFdiffusion
 mkdir models && cd models
@@ -54,13 +54,13 @@ cd ..
 pip install -e .
 
 # Clone and install SE(3)-Transformer for RFdiffusion in the project directory
-cd $HOME/Protein-design-rcp/pipeline_code
+cd /home/cdarbell/Protein-design-rcp/pipeline_code
 git clone https://github.com/FabianFuchsML/se3-transformer-public.git
 cd se3-transformer-public
 pip install -e .
 
 # Clone and set up ProteinMPNN in the project directory
-cd $HOME/Protein-design-rcp/pipeline_code
+cd /home/cdarbell/Protein-design-rcp/pipeline_code
 git clone https://github.com/dauparas/ProteinMPNN.git
 
 # Install ProteinMPNN requirements
@@ -68,13 +68,13 @@ cd ProteinMPNN
 pip install -r requirements.txt
 
 # Clone AlphaFold repository and install it in the project directory
-cd $HOME/Protein-design-rcp
+cd /home/cdarbell/Protein-design-rcp
 git clone https://github.com/deepmind/alphafold.git
 cd alphafold
 pip install -r requirements.txt
 
 # Prepare output directories in the project directory
-mkdir -p $HOME/Protein-design-rcp/Results $HOME/Protein-design-rcp/AF_current_job
+mkdir -p /home/cdarbell/Protein-design-rcp/Results /home/cdarbell/Protein-design-rcp/AF_current_job
 
 # Final message
 echo "Setup complete. Miniconda installed, environments created, and dependencies installed."
