@@ -1,16 +1,19 @@
 #!/bin/bash
 
+# Change directory to your main project directory
+cd $HOME/Protein-design-rcp
+
 # Update pip and install Miniconda
 pip install --upgrade pip
 
 # Download and install Miniconda for the user
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/miniconda3
+bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/Protein-design-rcp/miniconda3
 rm -f Miniconda3-latest-Linux-x86_64.sh
 
 # Set up the environment variables for Miniconda
-export PATH="$HOME/miniconda3/bin:$PATH"
-source $HOME/miniconda3/etc/profile.d/conda.sh
+export PATH="$HOME/Protein-design-rcp/miniconda3/bin:$PATH"
+source $HOME/Protein-design-rcp/miniconda3/etc/profile.d/conda.sh
 
 # Initialize conda and update
 conda init bash
@@ -29,7 +32,7 @@ pip install -r https://raw.githubusercontent.com/deepmind/alphafold/main/require
 # Install other required Python packages
 pip install spython yaml absl-py
 
-# Clone and install RFdiffusion
+# Clone and install RFdiffusion in the project directory
 cd $HOME/Protein-design-rcp/pipeline_code
 git clone https://github.com/RosettaCommons/RFdiffusion.git
 cd RFdiffusion
@@ -50,27 +53,27 @@ wget http://files.ipd.uw.edu/pub/RFdiffusion/1befcb9b28e2f778f53d47f18b7597fa/RF
 cd ..
 pip install -e .
 
-# Clone and install SE(3)-Transformer for RFdiffusion
-cd ../..
+# Clone and install SE(3)-Transformer for RFdiffusion in the project directory
+cd $HOME/Protein-design-rcp/pipeline_code
 git clone https://github.com/FabianFuchsML/se3-transformer-public.git
 cd se3-transformer-public
 pip install -e .
 
-# Clone and set up ProteinMPNN
-cd ../pipeline_code
+# Clone and set up ProteinMPNN in the project directory
+cd $HOME/Protein-design-rcp/pipeline_code
 git clone https://github.com/dauparas/ProteinMPNN.git
 
 # Install ProteinMPNN requirements
 cd ProteinMPNN
 pip install -r requirements.txt
 
-# Clone AlphaFold repository and install
-cd ../../..
+# Clone AlphaFold repository and install it in the project directory
+cd $HOME/Protein-design-rcp
 git clone https://github.com/deepmind/alphafold.git
 cd alphafold
 pip install -r requirements.txt
 
-# Prepare output directories
+# Prepare output directories in the project directory
 mkdir -p $HOME/Protein-design-rcp/Results $HOME/Protein-design-rcp/AF_current_job
 
 # Final message
