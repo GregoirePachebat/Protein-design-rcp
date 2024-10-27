@@ -9,8 +9,8 @@ fi
 CONFIG_FILE=$1
 
 # Activate conda environment
-source ~/miniconda3/etc/profile.d/conda.sh
-source activate SE3nv2.0
+source ~/Protein-design-rcp/miniconda3/etc/profile.d/conda.sh
+conda activate SE3nv2.0
 
 # Create job-specific output directories
 JOB_ID=$(date +%s)  # Use timestamp as a job ID for uniqueness
@@ -22,7 +22,7 @@ cd pipeline_code
 
 # Run RFdiffusion and ProteinMPNN using the provided config file
 echo "Running RFdiffusion and ProteinMPNN..."
-python main.py $CONFIG_FILE
+python main.py "../$CONFIG_FILE"
 
 # Run AlphaFold using Only_AF.sh
 cd ..
