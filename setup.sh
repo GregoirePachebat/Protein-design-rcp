@@ -17,19 +17,25 @@ conda init bash
 eval "$(conda shell.bash hook)"
 conda update -y conda
 
-# Move into the pipeline_code directory
-cd pipeline_code
-
-# Create and activate the SE3 environment
-conda env create -f SE3nv-cuda11.7.yml
+# Create and activate the SE3 environment for RFdiffusion
+conda create -n SE3nv2.0 python=3.9 -y
 conda activate SE3nv2.0
 
-# Clone and set up RFdiffusion
+# Install dependencies required by RFdiffusion and AlphaFold
+conda install -c conda-forge cudatoolkit=11.3 cudnn=8.2 -y
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+pip install -r https://raw.githubusercontent.com/deepmind/alphafold/main/requirements.txt
+
+# Install other required Python packages
+pip install spython yaml absl-py
+
+# Clone and install RFdiffusion
+cd $HOME/Protein-design-rcp/pipeline_code
 git clone https://github.com/RosettaCommons/RFdiffusion.git
 cd RFdiffusion
 mkdir models && cd models
 
-# Download RFdiffusion models
+# Download model weights for RFdiffusion
 wget http://files.ipd.uw.edu/pub/RFdiffusion/6f5902ac237024bdd0c176cb93063dc4/Base_ckpt.pt
 wget http://files.ipd.uw.edu/pub/RFdiffusion/e29311f6f1bf1af907f9ef9f44b8328b/Complex_base_ckpt.pt
 wget http://files.ipd.uw.edu/pub/RFdiffusion/60f09a193fb5e5ccdc4980417708dbab/Complex_Fold_base_ckpt.pt
@@ -44,22 +50,28 @@ wget http://files.ipd.uw.edu/pub/RFdiffusion/1befcb9b28e2f778f53d47f18b7597fa/RF
 cd ..
 pip install -e .
 
-# Add other dependencies to the environment
-pip install spython
-pip install yaml
-pip install absl-py
+# Clone and install SE(3)-Transformer for RFdiffusion
+cd ../..
+git clone https://github.com/FabianFuchsML/se3-transformer-public.git
+cd se3-transformer-public
+pip install -e .
 
-# Set up SE3 Transformer environment within RFdiffusion
-cd env/SE3Transformer
-pip install --no-cache-dir -r requirements.txt
-python setup.py install
-cd ../.. # back to RFdiffusion root
+# Clone and set up ProteinMPNN
+cd ../pipeline_code
+git clone https://github.com/dauparas/ProteinMPNN.git
 
-# Return to pipeline_code directory
-cd ..
+# Install ProteinMPNN requirements
+cd ProteinMPNN
+pip install -r requirements.txt
+
+# Clone AlphaFold repository and install
+cd ../../..
+git clone https://github.com/deepmind/alphafold.git
+cd alphafold
+pip install -r requirements.txt
 
 # Prepare output directories
 mkdir -p $HOME/Protein-design-rcp/Results $HOME/Protein-design-rcp/AF_current_job
 
 # Final message
-echo "Setup complete. Miniconda installed, RFdiffusion dependencies installed, and environment configured."
+echo "Setup complete. Miniconda installed, environments created, and dependencies installed."
