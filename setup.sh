@@ -1,19 +1,19 @@
 #!/bin/bash
 
+# Change directory to your main project directory
+cd /home/cdarbell/Protein-design-rcp
+
 # Update pip and install Miniconda
 pip install --upgrade pip
 
-# Change directory to a temporary location to avoid permission issues
-cd /tmp
-
-# Download and install Miniconda for the user in a temporary directory
+# Download and install Miniconda for the user in /home/cdarbell
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -p /tmp/miniconda3
+bash Miniconda3-latest-Linux-x86_64.sh -b -p /home/cdarbell/miniconda3
 rm -f Miniconda3-latest-Linux-x86_64.sh
 
 # Set up the environment variables for Miniconda
-export PATH="/tmp/miniconda3/bin:$PATH"
-source /tmp/miniconda3/etc/profile.d/conda.sh
+export PATH="/home/cdarbell/miniconda3/bin:$PATH"
+source /home/cdarbell/miniconda3/etc/profile.d/conda.sh
 
 # Initialize conda and update
 conda init bash
@@ -22,7 +22,7 @@ conda update -y conda
 
 # Create and activate the SE3 environment for RFdiffusion
 conda create -n SE3nv2.0 python=3.9 -y
-source activate SE3nv2.0
+conda activate SE3nv2.0
 
 # Install dependencies required by RFdiffusion and AlphaFold
 conda install -c conda-forge cudatoolkit=11.3 cudnn=8.2 -y
