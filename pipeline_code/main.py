@@ -1,9 +1,14 @@
 import yaml
 from run_models import RunRFdiffusion, RunProteinMPNN
-from main_tools import extract_residues_from_PDB, extract_contig_from_residue_table
 import os
-
+import sys
 
 if __name__ == "__main__":
-    RunRFdiffusion("../config.yaml")
-    RunProteinMPNN("../config.yaml")
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <config.yaml>")
+        sys.exit(1)
+
+    config_file = sys.argv[1]
+
+    RunRFdiffusion(config_file)
+    RunProteinMPNN(config_file)
