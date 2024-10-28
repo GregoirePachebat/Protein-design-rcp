@@ -8,7 +8,7 @@ fi
 
 CONFIG_FILE=$1
 
-# Activate conda environment
+# Activate conda environment for RFdiffusion, AlphaFold, and ProteinMPNN
 source ~/Protein-design-rcp/miniconda3/etc/profile.d/conda.sh
 conda activate SE3nv2.0
 
@@ -22,21 +22,21 @@ cd pipeline_code
 
 # Run RFdiffusion and ProteinMPNN using the provided config file
 echo "Running RFdiffusion and ProteinMPNN..."
-python main.py "../$CONFIG_FILE"
+python main.py $CONFIG_FILE
 
-# Run AlphaFold using Only_AF.sh
+# Run AlphaFold using Only_AF_new.sh
 cd ..
-chmod +x Only_AF.sh
-./Only_AF.sh $RESULTS_DIR
+chmod +x OnlyAF_new.sh
+./OnlyAF_new.sh
 
 # Move output files to the job-specific directory
 mv pipeline_code/RFdiffusion_tmp_output $RESULTS_DIR/RFdiffusion_pdbs
 mv pipeline_code/Sequences/seqs $RESULTS_DIR/sequences
-mv Output-$JOB_ID/* $RESULTS_DIR/AF_output
+mv Output-* $RESULTS_DIR/AF_output
 
 # Clean up temporary files
 rm -rf pipeline_code/Sequences
-rm -rf Output-$JOB_ID
+rm -rf Output-*
 
 # Final message
 echo "Pipeline complete. Results are stored in $RESULTS_DIR"
