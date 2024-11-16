@@ -19,27 +19,18 @@ WORKDIR /home/${LDAP_USERNAME}
 # Ensure non-interactive mode for apt-get
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Clean and update the system, then install dependencies
-RUN rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /var/lib/apt/lists/partial \
-    && chmod -R 755 /var/lib/apt/lists/ \
-    && apt-get update \
-    && apt-get install -y wget bash \
-    && rm -rf /var/lib/apt/lists/*
+# Clean and update the system, then install dependencie
 
-
-# Set up environment variables
-ENV PATH="/home/${LDAP_USERNAME}/miniconda3/bin:$PATH"
-
-
-#copy the app in the container
-COPY pipeline_code /app/pipeline_code
-COPY setup.sh /app/setup.sh
-COPY run.sh /app/run.sh
+COPY --chown=${LDAP_USERNAME}:${LDAP_GROUPNAME} pipeline_code /app/pipeline_code
+COPY --chown=${LDAP_USERNAME}:${LDAP_GROUPNAME} setup.sh /app/setup.sh
+COPY --chown=${LDAP_USERNAME}:${LDAP_GROUPNAME} run.sh /app/run.sh
 COPY config.yaml /app/config.yaml
+
+RUN chmod +x /app/run.sh
+RUN chmod +x /app/setup.sh
 
 WORKDIR /app
 
-RUN chmod +x /app/run.sh
+
 
 CMD ["/app/run.sh"]
