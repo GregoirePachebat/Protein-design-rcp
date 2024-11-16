@@ -6,6 +6,8 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
+./setup.sh
+
 CONFIG_FILE=$1
 
 # Activate conda environment for RFdiffusion, AlphaFold, and ProteinMPNN
